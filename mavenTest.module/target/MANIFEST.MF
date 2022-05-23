@@ -1,4 +1,4 @@
-Manifest-Version: 1.0.0.202205111528
+Manifest-Version: 1.0.0.202205200104
 Bundle-SymbolicName: mavenTest.module
 Bundle-ManifestVersion: 2
 TIBCO-BW-Edition: bwcf
@@ -9,7 +9,7 @@ Require-Capability: com.tibco.bw.model; filter:="(name=bwext)",com.tib
 TIBCO-BW-ConfigProfile: META-INF/default.substvar
 TIBCO-BW-Version: 2.6.1 V57 2021-02-13
 Bundle-Name: MavenTest Module
-Bundle-Version: 1.0.0.202205111528
+Bundle-Version: 1.0.0.202205200104
 Bundle-ClassPath: .
 TIBCO-BW-ApplicationModule: META-INF/module.bwm
 TIBCO-BW-JobSharedVariables: META-INF/module.jsv
