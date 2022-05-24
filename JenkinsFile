@@ -1,0 +1,94 @@
+try {
+    node('tibco_pipelines') {
+        def app, app2
+
+        stage('Clone Repository') 
+        {
+            final scmVars = checkout(scm)
+            env.BRANCH_NAME = scmVars.GIT_BRANCH
+            env.SHORT_COMMIT = "${scmVars.GIT_COMMIT[0..7]}"
+            env.GIT_REPO_NAME = scmVars.GIT_URL.replaceFirst(/^.*\/([^\/]+?).git$/, '$1')
+        }
+
+            //generate ear file
+
+        stage('Run Java Unit Tests') {
+        withMaven(maven: 'Tibco-M3') {
+            /// Run the maven build
+            sh "mvn -f *.parent/pom.xml package"
+        }
+    }
+
+        stage('Build Docker Image') {
+                app = docker.build("service-dev/${env.GIT_REPO_NAME}")
+           
+        }
+
+        stage('Run Java Unit Tests') {
+        withMaven(maven: 'Tibco-M3') {
+            /// Run the maven build
+            sh "mvn -f *.parent/pom.xml clean"
+        }
+    }
+        
+      
+
+        /* Finally, we'll push the image:
+        * We tag the image with the incremental build number from Jenkins
+        * Pushing multiple tags is cheap, as all the layers are reused.*/
+        if  (env.BRANCH_NAME == 'develop') {
+            stage('Push Image to openshift uat Registry') {
+                retry(3) {
+                    dir('deployment-folder') {
+                        docker.withRegistry('https://ocr1.devocp.safaricom.net/', 'service-dev-openshift-uat-registry') {
+                            app.push("uat-${env.SHORT_COMMIT}")
+                            app.push("latest")
+                        }
+                    }
+                }
+            }
+                
+            try {
+                // stage('Anchore scan') {
+                //     imageLine = imageString('ocr1.devocp.safaricom.net',env.GIT_REPO_NAME,'dev-',env.SHORT_COMMIT)
+                //     writeFile file: 'anchore_images', text: imageLine
+                //     anchore name: 'anchore_images'
+                // }
+            } catch (Exception e) {
+                echo 'scan failed but we will go on'
+            }
+
+        } 
+        else if (env.BRANCH_NAME == 'master') {
+            stage('Push Image to openshift prod Registry') {
+                retry(3) {
+                    dir('deployment-folder') {
+                        env.VERSION = version()
+                        docker.withRegistry('https://ocr7.apps.hqocp.safaricom.net/', 'service-dev-openshift-prod-registry') {
+                            app.push("v${env.Version}_${env.SHORT_COMMIT}")
+                            app.push("latest")
+                        }
+                    }
+                }
+            }
+
+        }
+    }
+	
+	// -Add email/stage to communicate port numbers after successfull deployment of a restfull service-.......
+
+} catch(Error|Exception e) {
+  //Finish failing the build after telling someone about it
+  throw e
+} finally {
+        // Post build steps here
+        /* Success or failure, always run post build steps */
+        // send email
+        // publish test results etc etc
+}
+
+def version()
+{
+    pom = readMavenPom file: 'pom.xml'
+    return pom.version
+}
