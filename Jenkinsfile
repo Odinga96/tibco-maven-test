@@ -7,7 +7,7 @@ pipeline {
     }
     stages {
         stage('Build') {
-            steps { sh 'mvn  package' }
+            steps { sh 'mvn -f mavenTest.parent/pom.xml package' }
         }
     }
 }
