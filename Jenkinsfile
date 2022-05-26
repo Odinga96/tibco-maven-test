@@ -1,7 +1,5 @@
 try{
-    node('Master'){
-//         maven 'M3_TIBCO' 
-        
+    node('Master'){        
         stage('Package') {
             withMaven(maven: 'M3_TIBCO') {
                 sh "mvn -f mavenTest.parent/pom.xml package"
