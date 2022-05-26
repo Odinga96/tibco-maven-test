@@ -1,13 +1,22 @@
-pipeline {
-    agent {
-        docker {
-            image 'maven:3.8.1-adoptopenjdk-11'
-            args '-v /root/.m2:/root/.m2'
+try{
+    node('Master'){
+        
+        stage('Package') {
+            withMaven(maven: 'Tibco-M3') {
+                sh "mvn -f *.parent/pom.xml package"
+            }
+        }
+
+        stage('Build Docker Image') { app = docker.build("service-dev/${env.GIT_REPO_NAME}") }
+
+        stage('Clean') {
+            withMaven(maven: 'Tibco-M3') {
+               sh "mvn -f *.parent/pom.xml clean"
+            }
         }
     }
-    stages {
-        stage('Build') {
-            steps { sh 'mvn -f *.parent/pom.xml package' }
-        }
-    }
+    
+}catch(Error|Exception e) {
+  throw e
+} finally {
 }
