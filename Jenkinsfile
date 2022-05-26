@@ -4,7 +4,7 @@ try{
         
         stage('Package') {
             withMaven(maven: 'M3_TIBCO') {
-                sh "mvn -f *.parent/pom.xml package"
+                sh "mvn -f mavenTest.parent/pom.xml package"
             }
         }
 
@@ -12,7 +12,7 @@ try{
 
         stage('Clean') {
             withMaven(maven: 'M3_TIBCO') {
-               sh "mvn -f *.parent/pom.xml clean"
+               sh "mvn -f mavenTest.parent/pom.xml clean"
             }
         }
     }
