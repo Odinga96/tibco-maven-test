@@ -2,6 +2,7 @@ try{
     node('Master'){        
         stage('Package') {
             withMaven(maven: 'M3_TIBCO') {
+                sh "ls -a"
                 sh "mvn -f mavenTest.parent/pom.xml package"
             }
         }
