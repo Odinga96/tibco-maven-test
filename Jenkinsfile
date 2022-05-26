@@ -1,9 +1,6 @@
 try{
     node('Master'){
-        
-        tools {
-          maven 'M3_TIBCO' 
-        }
+        maven 'M3_TIBCO' 
         
         stage('Package') {
 //             withMaven(maven: 'M3_TIBCO') {
