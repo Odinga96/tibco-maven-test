@@ -12,10 +12,10 @@
   <packaging>bwear</packaging>
   <properties>
     <skipTests>false</skipTests>
-    <bw.Home></bw.Home>
+    <!-- <bw.Home></bw.Home> -->
     <project.type>None</project.type>
     <failIfNoTests>false</failIfNoTests>
-    <tibco.Home></tibco.Home>
+    <!-- <tibco.Home></tibco.Home> -->
   </properties>
   <build>
     <plugins>

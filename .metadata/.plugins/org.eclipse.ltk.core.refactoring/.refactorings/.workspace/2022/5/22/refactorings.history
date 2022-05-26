@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">&#x0A;<refactoring comment="Rename resource &apos;parent&apos; to &apos;parent-module&apos;" description="Rename resource &apos;parent&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="/parent" name="parent-module" stamp="1653393082280" updateReferences="true"/>&#x0A;<refactoring comment="Rename resource &apos;parent-module&apos; to &apos;parent&apos;" description="Rename resource &apos;parent-module&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="/parent-module" name="parent" stamp="1653393133402" updateReferences="true"/>
+</session>
