@@ -10,12 +10,16 @@ try{
         
         stage('Package') {
             withMaven(maven: 'M3_TIBCO') {
-                sh "pwd && ls -a"
                 sh "mvn -f *.parent/pom.xml package"
             }
         }
 
-        stage('Build Docker Image') { app = docker.build("service-dev/${env.GIT_REPO_NAME}") }
+        stage('Build Docker Image') { 
+            sh "cd *.parent"
+            sh 'parent=${PWD##*/} && parent=${b%.*} && cd ../'
+            sh 'mv $parent/target/*.ear app.ear && ls'
+            app = docker.build("service-dev/${env.GIT_REPO_NAME}") 
+        }
 
         stage('Clean') {
             withMaven(maven: 'M3_TIBCO') {
