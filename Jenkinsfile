@@ -15,7 +15,7 @@ try{
         }
 
         stage('Build Docker Image') { 
-            sh "cd *.parent && parent=${PWD##*/} && parent=${parent%.*}"
+            sh 'cd *.parent && parent=${PWD##*/} && parent=${parent%.*}'
             sh 'mv $parent/target/*.ear app.ear'
             app = docker.build("service-dev/${env.GIT_REPO_NAME}") 
         }
